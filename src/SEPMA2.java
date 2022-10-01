@@ -55,18 +55,17 @@ public class SEPMA2 {
 		while (input != 4) {
 
 			switch (input) {
-			case 1:
-				if (login()) {
+				case 1:
+					if (login()) {
 
-					System.out.println("Successful login, do something");
-				} else {
-					MainMenu();
-				}
-			case 2:
-				forgotPassword();
-			case 3:
-				createAccount();
-
+						System.out.println("Successful login, do something");
+					} else {
+						MainMenu();
+					}
+				case 2:
+					forgotPassword();
+				case 3:
+					createAccount();
 			}
 
 			input = Integer.parseInt(sc.nextLine());
@@ -100,6 +99,73 @@ public class SEPMA2 {
 	}
 
 	public void createAccount() {
+		String email;
+		String firstName;
+		String lastName;
+		String phoneNo;
+		String password;
+
+		System.out.println("--------------------------");
+		System.out.println("Create Account");
+		System.out.println("--------------------------");
+		System.out.println("Enter email address:");
+		email = sc.nextLine();
+		while (email == null) {
+			System.out.println("Email cannot be blank:");
+			email = sc.nextLine();
+		}
+		System.out.println("Enter first name:");
+		firstName = sc.nextLine();
+		while (firstName == null) {
+			System.out.println("First name cannot be blank:");
+			firstName = sc.nextLine();
+		}
+		System.out.println("Enter last name:");
+		lastName = sc.nextLine();
+		while (lastName == null) {
+			System.out.println("Last name cannot be blank:");
+			lastName = sc.nextLine();
+		}
+		System.out.println("Enter phone number:");
+		phoneNo = sc.nextLine();
+		while (phoneNo == null) {
+			System.out.println("Phone number cannot be blank:");
+			phoneNo = sc.nextLine();
+		}
+		System.out.println("Enter password:");
+		password = sc.nextLine();
+		while (!checkPasswordString(password)) {
+			System.out.println("Password must contain an upper case, lower case and number:");
+			password = sc.nextLine();
+			checkPasswordString(password);
+		}
+		this.staff.add(new Staff(firstName, lastName, email, password, phoneNo));
+		System.out.println("Account created");
+		MainMenu();
+	}
+
+	//Check the password input contains an uppercase, lowercase and number character
+	private boolean checkPasswordString(String password) {
+		boolean upper = false;
+		boolean lower = false;
+		boolean num = false;
+		char tmp;
+
+		for (int i = 0; i < password.length(); i++) {
+			tmp = password.charAt(i);
+
+			if (Character.isUpperCase(tmp)) {
+				upper = true;
+			} else if (Character.isLowerCase(tmp)) {
+				lower = true;
+			} else if (Character.isDigit(tmp)) {
+				num = true;
+			}
+		}
+		if (upper && lower && num) {
+			return true;
+		}
+		return false;
 	}
 
 	public boolean startUp() {

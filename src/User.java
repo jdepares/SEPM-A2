@@ -1,5 +1,6 @@
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.BufferedWriter;
 
 class User {
 
@@ -21,8 +22,11 @@ class User {
 
 		try {
 			FileWriter myWriter = new FileWriter(dir, true);
-			myWriter.write(content + "\n");
-			myWriter.close();
+			BufferedWriter bw = new BufferedWriter(myWriter);
+			//myWriter.write(content + "\n");
+			//myWriter.close();
+			bw.append(content);
+			bw.close();
 			return true;
 		} catch (IOException e) {
 			return false;
