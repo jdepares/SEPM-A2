@@ -1,5 +1,0 @@
-1,Harry,Styles,hstyles@student.rmit.edu.au,Password123,0412345678
-1,Niall,Horan,hhoran@houdent.rmit.edu.au,Password234,0423456789
-1,Liam,Payne,hpayne@paudent.rmit.edu.au,Password345,0434567900
-2,Louis,Tomlinson,htomlinson@toudent.rmit.edu.au,Password456,0445679011
-2,Zayn,Malik,hmalik@maudent.rmit.edu.au,Password567,0456790122

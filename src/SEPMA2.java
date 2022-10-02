@@ -144,7 +144,8 @@ public class SEPMA2 {
 		MainMenu();
 	}
 
-	//Check the password input contains an uppercase, lowercase and number character
+	// Check the password input contains an uppercase, lowercase and number
+	// character
 	private boolean checkPasswordString(String password) {
 		boolean upper = false;
 		boolean lower = false;
@@ -172,7 +173,7 @@ public class SEPMA2 {
 
 		// Staff
 		try {
-			File myObj = new File("./src/Files/Staff.txt");
+			File myObj = new File("./Files/Staff.txt");
 			Scanner myReader = new Scanner(myObj);
 			while (myReader.hasNextLine()) {
 				String data = myReader.nextLine();
