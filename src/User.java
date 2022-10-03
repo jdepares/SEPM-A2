@@ -1,8 +1,9 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 
-class User {
+abstract class User {
 
 	protected boolean CheckPassword(String password, String userInput) {
 		return password.equals(userInput)  ? true : false;
@@ -33,4 +34,6 @@ class User {
 		}
 
 	}
+	
+	protected abstract void ChangePassword(String email, String newPassword) throws IOException, FileNotFoundException;
 }
