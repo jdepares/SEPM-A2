@@ -64,6 +64,7 @@ public class SEPMA2 {
 					}
 				case 2:
 					forgotPassword();
+					break;
 				case 3:
 					createAccount();
 			}
@@ -96,6 +97,46 @@ public class SEPMA2 {
 	}
 
 	public void forgotPassword() {
+		String email, newPassword;
+		Boolean match = false;
+		User user = null;
+		
+		System.out.println("--------------------------");
+		System.out.println("Forgot Password");
+		System.out.println("--------------------------");
+		System.out.println("Enter email address:");
+		
+		email = sc.nextLine();
+		
+		for (int i = 0; i < this.staff.size(); i++) {
+			if (this.staff.get(i).email.equals(email)) {
+				user = this.staff.get(i);
+			}
+		}
+		
+		if (user == null) {
+			for (int i = 0; i < this.technician.size(); i++) {
+				if (this.technician.get(i).email.equals(email)) {
+					user = this.technician.get(i);
+				}
+			}
+		}
+		
+		if (user != null) {
+			System.out.println("User found...");
+			System.out.println("Enter new password: ");
+			
+			newPassword = sc.nextLine();
+			
+			try { 
+				user.ChangePassword(email, newPassword);
+			} catch (Exception e) {
+				System.out.println("Error");
+			}
+			
+		} else {
+			System.out.println("No users found matching " + email);
+		}
 	}
 
 	public void createAccount() {
