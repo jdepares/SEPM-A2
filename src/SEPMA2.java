@@ -151,8 +151,8 @@ public class SEPMA2 {
 		System.out.println("--------------------------");
 		System.out.println("Enter email address:");
 		email = sc.nextLine();
-		while (email == null) {
-			System.out.println("Email cannot be blank:");
+		while (email == null || !checkEmailIsUnique(email)) {
+			System.out.println("Please enter a unique email address:");
 			email = sc.nextLine();
 		}
 		System.out.println("Enter first name:");
@@ -175,23 +175,37 @@ public class SEPMA2 {
 		}
 		System.out.println("Enter password:");
 		password = sc.nextLine();
-		while (!checkPasswordString(password)) {
+		while (!checkPasswordRequirments(password)) {
 			System.out.println("Password must contain an upper case, lower case and number:");
 			password = sc.nextLine();
-			checkPasswordString(password);
+			checkPasswordRequirments(password);
 		}
 		this.staff.add(new Staff(firstName, lastName, email, password, phoneNo));
 		System.out.println("Account created");
 		MainMenu();
 	}
 
-	// Check the password input contains an uppercase, lowercase and number
-	// character
-	private boolean checkPasswordString(String password) {
+	//check the input email does not already exist in the system
+	private boolean checkEmailIsUnique(String email){
+		for (int i = 0; i < this.staff.size(); i++) {
+			if (this.staff.get(i).email.equals(email)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	// Check the password input contains an uppercase, lowercase, number
+	// character and is at least 20 characters in length
+	private boolean checkPasswordRequirments(String password) {
 		boolean upper = false;
 		boolean lower = false;
 		boolean num = false;
 		char tmp;
+
+		if(password.length() < 20){
+			return false;
+		}
 
 		for (int i = 0; i < password.length(); i++) {
 			tmp = password.charAt(i);
