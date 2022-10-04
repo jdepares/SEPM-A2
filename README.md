@@ -5,17 +5,11 @@ A ticketing system for an IT Service Desk
 ## Prerequisites
 
 - Java SE >18
-- Visual Studio Code (recommended)
+- Eclipse >=4.25.0
 
-## Quick Start
+## Getting Started
 
-### Using VSC Launch Config (recommended)
-
-1. Navigate to the "Run and Debug" panel in the sidebar
-2. Select the "Launch SEPMA2", and click "Start Debugging" (or press F5)
-
-### Using the Terminal
-
-`cd src && javac SEPMA2.java && java SEPMA2`
-
-## Troubleshooting
+1. Open Eclipse, and select "Import Projects..."
+2. A dialog will open, expand the "General" folder, select "Existing Projects into Workspace", and click "Next"
+3. Set the root directory as this repository, and click "Finish"
+4. Click the green Play icon to run the application
