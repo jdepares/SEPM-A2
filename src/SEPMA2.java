@@ -228,7 +228,7 @@ public class SEPMA2 {
 
 		// Staff
 		try {
-			File myObj = new File("./Files/Staff.txt");
+			File myObj = new File("./src/Files/Staff.txt");
 			Scanner myReader = new Scanner(myObj);
 			while (myReader.hasNextLine()) {
 				String data = myReader.nextLine();
