@@ -17,26 +17,6 @@ public class SEPMA2 {
 		// Import data from text files
 		startUp();
 
-		// Remove before submit, used to test
-		for (int i = 0; i < this.staff.size(); i++) {
-			System.out.println(this.staff.get(i).firstName);
-			System.out.println(this.staff.get(i).lastName);
-			System.out.println(this.staff.get(i).email);
-			System.out.println(this.staff.get(i).password);
-			System.out.println(this.staff.get(i).phone);
-			System.out.println("------------");
-		}
-
-		for (int i = 0; i < this.technician.size(); i++) {
-			System.out.println(this.technician.get(i).level);
-			System.out.println(this.technician.get(i).firstName);
-			System.out.println(this.technician.get(i).lastName);
-			System.out.println(this.technician.get(i).email);
-			System.out.println(this.technician.get(i).password);
-			System.out.println(this.technician.get(i).phone);
-			System.out.println("------------");
-		}
-
 		MainMenu();
 
 	}

@@ -46,6 +46,8 @@ public class Staff extends User {
 
 	@Override
 	protected void ChangePassword(String email, String newPassword) throws IOException, FileNotFoundException {
+		this.password = newPassword;
+		
 		String fileName = "./src/Files/Staff.txt";
 		String data = "";
 		String[] lineData;
@@ -60,7 +62,7 @@ public class Staff extends User {
 		while ((line = br.readLine()) != null) {
 			
 			lineData = line.split(",");
-			emailRecord = lineData[3];
+			emailRecord = lineData[2];
 			
 			if (emailRecord.equals(email)) {
 				userRecord = lineData;			
@@ -71,7 +73,7 @@ public class Staff extends User {
 		
 		// Write data to file
 		if (userRecord != null) {
-			userRecord[4] = newPassword;
+			userRecord[3] = newPassword;
 			
 			FileWriter myWriter = new FileWriter(fileName, false);
 			BufferedWriter bw = new BufferedWriter(myWriter);
@@ -79,7 +81,7 @@ public class Staff extends User {
 			//myWriter.close();
 
 			bw.write(data);
-			bw.append(String.format("%s,%s,%s,%s,%s,%s", userRecord[0], userRecord[1], userRecord[2], userRecord[3], userRecord[4], userRecord[5]));
+			bw.append(String.format("%s,%s,%s,%s,%s", userRecord[0], userRecord[1], userRecord[2], userRecord[3], userRecord[4]));
 			bw.close();
 		}
 		

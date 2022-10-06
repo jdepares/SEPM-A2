@@ -48,6 +48,8 @@ public class Technician extends User {
 
 	@Override
 	protected void ChangePassword(String email, String newPassword) throws IOException, FileNotFoundException {
+		this.password = newPassword;
+		
 		String fileName = "./src/Files/Technicians.txt";
 		String data = "";
 		String[] lineData;
