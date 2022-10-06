@@ -42,33 +42,39 @@ public class SEPMA2 {
 	}
 
 	public void MainMenu() {
-		System.out.println("--------------------------");
-		System.out.println("Welcome");
-		System.out.println("--------------------------");
-		System.out.println("1. Login");
-		System.out.println("2. Forgot Password");
-		System.out.println("3. Create Account");
-		System.out.println("4. Exit");
+		
+		String mainMenu = """
+				--------------------------
+				Welcome
+				--------------------------
+				1. Login
+				2. Forgot Password
+				3. Create Account
+				4. Exit
+				""";
 
 		int input = 0;
+		
+		
 
 		while (input != 4) {
-
+			
 			switch (input) {
 				case 1:
 					if (login()) {
-
 						System.out.println("Successful login, do something");
 					} else {
-						MainMenu();
+						break;
 					}
 				case 2:
 					forgotPassword();
 					break;
 				case 3:
 					createAccount();
-			}
+					break;
 
+			}
+			System.out.println(mainMenu);
 			input = Integer.parseInt(sc.nextLine());
 		}
 	}

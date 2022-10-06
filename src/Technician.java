@@ -79,7 +79,6 @@ public class Technician extends User {
 			BufferedWriter bw = new BufferedWriter(myWriter);
 			//myWriter.write(content + "\n");
 			//myWriter.close();
-			System.out.println(String.format("userRecord[5]: %s", userRecord[5]));
 
 			bw.write(data);
 			bw.append(String.format("%s,%s,%s,%s,%s,%s", userRecord[0], userRecord[1], userRecord[2], userRecord[3], userRecord[4], userRecord[5]));
