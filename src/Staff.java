@@ -7,14 +7,6 @@ import java.io.IOException;
 
 public class Staff extends User {
 
-	public String firstName;
-	public String lastName;
-
-	public String email;
-	public String password;
-
-	public String phone;
-
 	public Staff(String firstName, String lastName, String email, String password, String phone) {
 		super();
 		this.firstName = firstName;
@@ -41,48 +33,51 @@ public class Staff extends User {
 	public boolean CheckPassword(String password) {
 		System.out.println(this.password);
 		System.out.println(password);
+		this.isLoggedIn = true;
 		return super.CheckPassword(password, this.password);
 	}
 
 	@Override
 	protected void ChangePassword(String email, String newPassword) throws IOException, FileNotFoundException {
+		this.password = newPassword;
+
 		String fileName = "./src/Files/Staff.txt";
 		String data = "";
 		String[] lineData;
 		String emailRecord;
 		String[] userRecord = null;
-		
-		
+
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
-		
+
 		String line;
-		
+
 		while ((line = br.readLine()) != null) {
-			
+
 			lineData = line.split(",");
-			emailRecord = lineData[3];
-			
+			emailRecord = lineData[2];
+
 			if (emailRecord.equals(email)) {
-				userRecord = lineData;			
+				userRecord = lineData;
 			} else {
 				data += line + "\n";
 			}
 		}
-		
+
 		// Write data to file
 		if (userRecord != null) {
-			userRecord[4] = newPassword;
-			
+			userRecord[3] = newPassword;
+
 			FileWriter myWriter = new FileWriter(fileName, false);
 			BufferedWriter bw = new BufferedWriter(myWriter);
-			//myWriter.write(content + "\n");
-			//myWriter.close();
+			// myWriter.write(content + "\n");
+			// myWriter.close();
 
 			bw.write(data);
-			bw.append(String.format("%s,%s,%s,%s,%s,%s", userRecord[0], userRecord[1], userRecord[2], userRecord[3], userRecord[4], userRecord[5]));
+			bw.append(String.format("%s,%s,%s,%s,%s", userRecord[0], userRecord[1], userRecord[2], userRecord[3],
+					userRecord[4]));
 			bw.close();
 		}
-		
+
 	}
 
 }

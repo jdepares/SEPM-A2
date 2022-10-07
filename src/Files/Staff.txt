@@ -1,2 +1,3 @@
-Jacob,Depares,S3851480@student.rmit.edu.au,Password123,0451820205
-Ely,Hawkins,s3754457@student.rmit.edu.au,Abc123,0421795012
+Jennifer,Muirhead,Jennifer@gmail.com,Password123,0412123123
+Jacob,Depares,S3851480@student.rmit.edu.au,Test123,0451820205
+Ely,Hawkins,s3754457@student.rmit.edu.au,Password123,0421795012

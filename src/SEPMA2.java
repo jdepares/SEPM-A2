@@ -1,10 +1,8 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Scanner;
 
 public class SEPMA2 {
 
@@ -19,58 +17,70 @@ public class SEPMA2 {
 
 		// Remove before submit, used to test
 		for (int i = 0; i < this.staff.size(); i++) {
-			System.out.println(this.staff.get(i).firstName);
-			System.out.println(this.staff.get(i).lastName);
-			System.out.println(this.staff.get(i).email);
-			System.out.println(this.staff.get(i).password);
-			System.out.println(this.staff.get(i).phone);
+			System.out.println(this.staff.get(i).getFirstName());
+			System.out.println(this.staff.get(i).getLastName());
+			System.out.println(this.staff.get(i).getEmail());
+			System.out.println(this.staff.get(i).getPassword());
+			System.out.println(this.staff.get(i).getPhone());
 			System.out.println("------------");
 		}
 
 		for (int i = 0; i < this.technician.size(); i++) {
-			System.out.println(this.technician.get(i).level);
-			System.out.println(this.technician.get(i).firstName);
-			System.out.println(this.technician.get(i).lastName);
-			System.out.println(this.technician.get(i).email);
-			System.out.println(this.technician.get(i).password);
-			System.out.println(this.technician.get(i).phone);
+			System.out.println(this.technician.get(i).getLevel());
+			System.out.println(this.technician.get(i).getFirstName());
+			System.out.println(this.technician.get(i).getLastName());
+			System.out.println(this.technician.get(i).getEmail());
+			System.out.println(this.technician.get(i).getPassword());
+			System.out.println(this.technician.get(i).getPhone());
 			System.out.println("------------");
 		}
 
-		MainMenu();
+		mainMenu();
 
 	}
 
-	public void MainMenu() {
-		System.out.println("--------------------------");
-		System.out.println("Welcome");
-		System.out.println("--------------------------");
-		System.out.println("1. Login");
-		System.out.println("2. Forgot Password");
-		System.out.println("3. Create Account");
-		System.out.println("4. Exit");
+	public void mainMenu() {
+		String mainMenu = """
+				--------------------------
+				Welcome
+				--------------------------
+				1. Login
+				2. Logout
+				3. Forgot Password
+				4. Create Account
+				5. Exit
+				""";
 
 		int input = 0;
 
-		while (input != 4) {
+		while (input != 5) {
 
 			switch (input) {
-				case 1:
-					if (login()) {
-
-						System.out.println("Successful login, do something");
-					} else {
-						MainMenu();
-					}
-				case 2:
-					forgotPassword();
-					break;
-				case 3:
-					createAccount();
+			case 1:
+				if (this.staff.stream().filter(x -> x.getIsLoggedIn() == true).findFirst().isPresent()) {
+					System.out.println("Already logged in");
+				} else if (login()) {
+					System.out.println("Login successful");
+				}
+				break;
+			case 2:
+				if (this.staff.stream().filter(x -> x.getIsLoggedIn() == true).findFirst().isPresent()) {
+					logout();
+				} else {
+					System.out.println("You are not logged in yet");
+				}
+				break;
+			case 3:
+				forgotPassword();
+				break;
+			case 4:
+				createAccount();
+				break;
 			}
-
+			System.out.println(mainMenu);
 			input = Integer.parseInt(sc.nextLine());
 		}
+		System.exit(0);
 	}
 
 	public boolean login() {
@@ -82,38 +92,44 @@ public class SEPMA2 {
 		System.out.println("password");
 		String password = sc.nextLine();
 
-		if (this.staff.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().isPresent()) {
-
-			return this.staff.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().get()
+		if (this.staff.stream().filter(x -> x.getEmail().equalsIgnoreCase(email)).findFirst().isPresent()) {
+			return this.staff.stream().filter(x -> x.getEmail().equalsIgnoreCase(email)).findFirst().get()
 					.CheckPassword(password);
 
-		} else if (this.technician.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().isPresent()) {
-
-			return this.technician.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().get()
+		} else if (this.technician.stream().filter(x -> x.getEmail().equalsIgnoreCase(email)).findFirst().isPresent()) {
+			return this.technician.stream().filter(x -> x.getEmail().equalsIgnoreCase(email)).findFirst().get()
 					.CheckPassword(password);
 		} else {
+			System.out.print("Email or password incorrect\n");
 			return false;
+		}
+	}
+
+	public void logout() {
+		if (this.staff.stream().filter(x -> x.getIsLoggedIn() == true).findFirst().isPresent()) {
+			User loggedInUser = this.staff.stream().filter(x -> x.getIsLoggedIn() == true).findFirst().get();
+			loggedInUser.setIsLoggedIn(false);
+			System.out.println("Successfully logged out");
 		}
 	}
 
 	public void forgotPassword() {
 		String email, newPassword;
-		Boolean match = false;
 		User user = null;
-		
+
 		System.out.println("--------------------------");
 		System.out.println("Forgot Password");
 		System.out.println("--------------------------");
 		System.out.println("Enter email address:");
-		
+
 		email = sc.nextLine();
-		
+
 		for (int i = 0; i < this.staff.size(); i++) {
 			if (this.staff.get(i).email.equals(email)) {
 				user = this.staff.get(i);
 			}
 		}
-		
+
 		if (user == null) {
 			for (int i = 0; i < this.technician.size(); i++) {
 				if (this.technician.get(i).email.equals(email)) {
@@ -121,19 +137,19 @@ public class SEPMA2 {
 				}
 			}
 		}
-		
+
 		if (user != null) {
 			System.out.println("User found...");
 			System.out.println("Enter new password: ");
-			
+
 			newPassword = sc.nextLine();
-			
-			try { 
+
+			try {
 				user.ChangePassword(email, newPassword);
 			} catch (Exception e) {
 				System.out.println("Error");
 			}
-			
+
 		} else {
 			System.out.println("No users found matching " + email);
 		}
@@ -180,9 +196,10 @@ public class SEPMA2 {
 			password = sc.nextLine();
 			checkPasswordString(password);
 		}
+
 		this.staff.add(new Staff(firstName, lastName, email, password, phoneNo));
 		System.out.println("Account created");
-		MainMenu();
+		mainMenu();
 	}
 
 	// Check the password input contains an uppercase, lowercase and number
@@ -214,7 +231,7 @@ public class SEPMA2 {
 
 		// Staff
 		try {
-			File myObj = new File("./Files/Staff.txt");
+			File myObj = new File("./src/Files/Staff.txt");
 			Scanner myReader = new Scanner(myObj);
 			while (myReader.hasNextLine()) {
 				String data = myReader.nextLine();
