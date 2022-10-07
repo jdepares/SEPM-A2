@@ -40,16 +40,14 @@ public class SEPMA2 {
 	}
 
 	public void mainMenu() {
-		String mainMenu = """
-				--------------------------
-				Welcome
-				--------------------------
-				1. Login
-				2. Logout
-				3. Forgot Password
-				4. Create Account
-				5. Exit
-				""";
+		System.out.println("--------------------------");
+		System.out.println("Welcome");
+		System.out.println("--------------------------");
+		System.out.println("1. Login");
+		System.out.println("2. Logout");
+		System.out.println("3. Forgot Password");
+		System.out.println("4. Create Account");
+		System.out.println("5. Exit");
 
 		int input = 0;
 
@@ -62,6 +60,7 @@ public class SEPMA2 {
 				} else if (login()) {
 					System.out.println("Login successful");
 				}
+				mainMenu();
 				break;
 			case 2:
 				if (this.staff.stream().filter(x -> x.getIsLoggedIn() == true).findFirst().isPresent()) {
@@ -69,15 +68,18 @@ public class SEPMA2 {
 				} else {
 					System.out.println("You are not logged in yet");
 				}
+				mainMenu();
 				break;
 			case 3:
 				forgotPassword();
+				mainMenu();
 				break;
 			case 4:
 				createAccount();
+				mainMenu();
 				break;
 			}
-			System.out.println(mainMenu);
+
 			input = Integer.parseInt(sc.nextLine());
 		}
 		System.exit(0);
