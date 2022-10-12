@@ -8,8 +8,11 @@ import java.util.Optional;
 
 public class SEPMA2 {
 
+	public User currentUser;
+
 	public List<Staff> staff = new ArrayList<>();
 	public List<Technician> technician = new ArrayList<>();
+	public List<Ticket> tickets = new ArrayList<>();
 	Scanner sc = new Scanner(System.in);
 
 	public SEPMA2() {
@@ -21,8 +24,9 @@ public class SEPMA2 {
 
 	}
 
+	// -------------Menus----------------
 	public void MainMenu() {
-		
+
 		String mainMenu = """
 				--------------------------
 				Welcome
@@ -34,24 +38,31 @@ public class SEPMA2 {
 				""";
 
 		int input = 0;
-		
-		
 
 		while (input != 4) {
-			
+
 			switch (input) {
-				case 1:
-					if (login()) {
-						System.out.println("Successful login, do something");
+			case 1:
+				if (login()) {
+
+					if (this.currentUser instanceof Staff) {
+
+						StaffLoginMenu();
 					} else {
-						break;
+
+						TechLoginMenu();
 					}
-				case 2:
-					forgotPassword();
+
 					break;
-				case 3:
-					createAccount();
+				} else {
 					break;
+				}
+			case 2:
+				forgotPassword();
+				break;
+			case 3:
+				createAccount();
+				break;
 
 			}
 			System.out.println(mainMenu);
@@ -59,6 +70,74 @@ public class SEPMA2 {
 		}
 	}
 
+	public void StaffLoginMenu() {
+
+		Staff currentUser = (Staff) this.currentUser;
+
+		String menu = """
+				--------------------------
+				Welcome""" + " " + currentUser.firstName + " " + currentUser.lastName.toUpperCase() + "\n" + """
+				--------------------------
+				1. Dashboard
+				2. New Ticket
+				3. Logout
+				4. Exit
+				""";
+
+		int input = 0;
+		while (input != 4) {
+
+			switch (input) {
+			case 1:
+				break;
+			case 2:
+				newTicket();
+
+				break;
+			case 3:
+				logout();
+				break;
+
+			}
+			System.out.println(menu);
+			input = Integer.parseInt(sc.nextLine());
+		}
+
+	}
+
+	public void TechLoginMenu() {
+
+	}
+
+	public void newTicket() {
+
+		System.out.println("Subject:");
+		String subject = sc.nextLine();
+
+		System.out.println("Description:");
+		String description = sc.nextLine();
+
+		String sev = """
+				1. Low
+				2. High""";
+
+		System.out.println(sev);
+		int severity = Integer.parseInt(sc.nextLine());
+
+		Severity severityEnum = severity == 1 ? Severity.LOW : Severity.HIGH;
+
+		Ticket ticket = new Ticket(
+				true, this.tickets.size() + 101, this.staff.stream()
+						.filter(x -> x.email.equalsIgnoreCase(((Staff) this.currentUser).email)).findFirst().get(),
+				subject, description, severityEnum);
+
+		this.tickets.add(ticket);
+		this.staff.stream().filter(x -> x.email.equalsIgnoreCase(((Staff) this.currentUser).email)).findFirst().get()
+				.addTicket(ticket);
+
+	}
+
+	// ------------- Functions-------------
 	public boolean login() {
 		System.out.println("--------------------------");
 		System.out.println("Login");
@@ -68,38 +147,52 @@ public class SEPMA2 {
 		System.out.println("password");
 		String password = sc.nextLine();
 
+		boolean succesfulLogin = false;
+
 		if (this.staff.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().isPresent()) {
 
-			return this.staff.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().get()
+			succesfulLogin = this.staff.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().get()
 					.CheckPassword(password);
+
+			this.currentUser = (Staff) this.staff.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst()
+					.get();
 
 		} else if (this.technician.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().isPresent()) {
 
-			return this.technician.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().get()
+			succesfulLogin = this.technician.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().get()
 					.CheckPassword(password);
-		} else {
-			return false;
+
+			this.currentUser = (Technician) this.technician.stream().filter(x -> x.email.equalsIgnoreCase(email))
+					.findFirst().get();
 		}
+
+		return succesfulLogin;
+	}
+
+	public void logout() {
+		this.currentUser = null;
+		MainMenu();
+
 	}
 
 	public void forgotPassword() {
 		String email, newPassword;
 		Boolean match = false;
 		User user = null;
-		
+
 		System.out.println("--------------------------");
 		System.out.println("Forgot Password");
 		System.out.println("--------------------------");
 		System.out.println("Enter email address:");
-		
+
 		email = sc.nextLine();
-		
+
 		for (int i = 0; i < this.staff.size(); i++) {
 			if (this.staff.get(i).email.equals(email)) {
 				user = this.staff.get(i);
 			}
 		}
-		
+
 		if (user == null) {
 			for (int i = 0; i < this.technician.size(); i++) {
 				if (this.technician.get(i).email.equals(email)) {
@@ -107,19 +200,19 @@ public class SEPMA2 {
 				}
 			}
 		}
-		
+
 		if (user != null) {
 			System.out.println("User found...");
 			System.out.println("Enter new password: ");
-			
+
 			newPassword = sc.nextLine();
-			
-			try { 
+
+			try {
 				user.ChangePassword(email, newPassword);
 			} catch (Exception e) {
 				System.out.println("Error");
 			}
-			
+
 		} else {
 			System.out.println("No users found matching " + email);
 		}
@@ -171,8 +264,8 @@ public class SEPMA2 {
 		MainMenu();
 	}
 
-	//check the input email does not already exist in the system
-	private boolean checkEmailIsUnique(String email){
+	// check the input email does not already exist in the system
+	private boolean checkEmailIsUnique(String email) {
 		for (int i = 0; i < this.staff.size(); i++) {
 			if (this.staff.get(i).email.equals(email)) {
 				return false;
@@ -180,7 +273,7 @@ public class SEPMA2 {
 		}
 		return true;
 	}
-	
+
 	// Check the password input contains an uppercase, lowercase, number
 	// character and is at least 20 characters in length
 	private boolean checkPasswordRequirments(String password) {
@@ -189,7 +282,7 @@ public class SEPMA2 {
 		boolean num = false;
 		char tmp;
 
-		if(password.length() < 20){
+		if (password.length() < 20) {
 			return false;
 		}
 
@@ -210,6 +303,7 @@ public class SEPMA2 {
 		return false;
 	}
 
+	// -----------Start Up--------------
 	public boolean startUp() {
 
 		// Staff
@@ -238,6 +332,37 @@ public class SEPMA2 {
 						technician[3], technician[4], technician[5]));
 
 			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			return false;
+		}
+
+		// Tickets
+		try {
+			File myObj = new File("./src/Files/Tickets.txt");
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				String[] ticketData = data.split(",");
+
+				Ticket ticket = new Ticket(Integer.parseInt(ticketData[0]),
+						this.staff.stream().filter(x -> x.email.equalsIgnoreCase(ticketData[1])).findFirst().get(),
+						ticketData[3], ticketData[4], Severity.valueOf(ticketData[5]));
+
+				ticket.setStatus(Status.valueOf(ticketData[6]));
+
+				if (!ticketData[2].equals("")) {
+					ticket.setAssignedTo(this.technician.stream().filter(x -> x.email.equalsIgnoreCase(ticketData[2]))
+							.findFirst().get());
+
+				}
+
+				this.tickets.add(ticket);
+				this.staff.stream().filter(x -> x.email.equalsIgnoreCase(ticketData[1])).findFirst().get()
+						.addTicket(ticket);
+
+			}
+
 			myReader.close();
 		} catch (FileNotFoundException e) {
 			return false;
