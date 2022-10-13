@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Technician extends User {
 	
@@ -16,6 +18,7 @@ public class Technician extends User {
 	public String password;
 
 	public String phone;
+	public List<Ticket> assignedTickets = new ArrayList<>();
 
 	public Technician(int level, String firstName, String lastName, String email, String password, String phone) {
 		super();
@@ -86,7 +89,9 @@ public class Technician extends User {
 			bw.append(String.format("%s,%s,%s,%s,%s,%s", userRecord[0], userRecord[1], userRecord[2], userRecord[3], userRecord[4], userRecord[5]));
 			bw.close();
 		}
-		
 	}
-
+	
+	public void addTicket(Ticket ticket) {
+		this.assignedTickets.add(ticket);
+	}
 }
