@@ -86,5 +86,8 @@ public class Staff extends User {
 		}
 		
 	}
+	public void addTicket(Ticket ticket) {
+		
+	}
 
 }

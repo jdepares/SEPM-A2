@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -44,7 +45,6 @@ public class SEPMA2 {
 			switch (input) {
 			case 1:
 				if (login()) {
-
 					if (this.currentUser instanceof Staff) {
 
 						StaffLoginMenu();
@@ -106,6 +106,78 @@ public class SEPMA2 {
 	}
 
 	public void TechLoginMenu() {
+		Technician currentUser = (Technician) this.currentUser;
+
+		String menu = "--------------------------\nWelcome\n--------------------------\n" + 
+		"1. Change Ticket Status\n2. Logout";
+		String input = "";
+
+		while (!input.equals("2")) {
+
+			System.out.println(menu);
+			input = sc.nextLine();
+
+			switch (input) {
+			case "1":
+				System.out.println("Enter ticket number: ");
+				int ticketNum = Integer.parseInt(sc.nextLine());
+				Ticket ticket = null;
+
+				for (int i = 0; i < tickets.size(); i += 1) {
+					if (tickets.get(i).ticketNumber == ticketNum) {
+						ticket = tickets.get(i);
+					}
+				}
+
+				if (ticket != null) {
+					System.out.println(String.format("Ticket: %s\nSubject: %s\nDescription: %s\n", ticket.ticketNumber,
+							ticket.subject, ticket.description));
+					System.out.println(
+							"Select new status: \n1. Open\n2. Closed\n3. Unresolved\n4. Resolved\n5. Archived\n");
+					input = sc.nextLine();
+					Boolean error = false;
+
+					try {
+						switch (input) {
+						case "1":
+							ticket.setStatus(Status.Open);
+							ticket.changeStatus(String.valueOf(ticketNum), "Open");
+							break;
+						case "2":
+							ticket.setStatus(Status.Closed);
+							ticket.changeStatus(String.valueOf(ticketNum), "Closed");
+							break;
+						case "3":
+							ticket.setStatus(Status.Unresolved);
+							ticket.changeStatus(String.valueOf(ticketNum), "Unresolved");
+							break;
+						case "4":
+							ticket.setStatus(Status.Resolved);
+							ticket.changeStatus(String.valueOf(ticketNum), "Resolved");
+							break;
+						case "5":
+							ticket.setStatus(Status.Archived);
+							ticket.changeStatus(String.valueOf(ticketNum), "Archived");
+							break;
+						default:
+							error = true;
+							break;
+						}
+					} catch (IOException e) {
+						System.out.println("Error: Cannot access system records");
+					}
+
+					if (error) {
+						System.out.println("Error: Invalid selection.");
+					} else {
+						System.out.println("Ticket status changed.");
+					}
+
+				} else {
+					System.out.println(String.format("Ticket number %s does not exist.", ticketNum));
+				}
+			}
+		}
 
 	}
 
