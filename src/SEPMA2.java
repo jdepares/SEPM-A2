@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 public class SEPMA2 {
 
@@ -204,9 +205,41 @@ public class SEPMA2 {
 				subject, description, severityEnum);
 
 		this.tickets.add(ticket);
-		this.staff.stream().filter(x -> x.email.equalsIgnoreCase(((Staff) this.currentUser).email)).findFirst().get()
-				.addTicket(ticket);
+		/*this.staff.stream().filter(x -> x.email.equalsIgnoreCase(((Staff)this.currentUser).email)).findFirst().get()
+		.addTicket(ticket);*/
+		assignTicket(ticket, severity);
 
+	}
+
+	private void assignTicket(Ticket ticket, int level) {
+		Technician tech = null;
+		List<Technician> lowestTickets = new ArrayList<>();
+		//Find tech with the lowest tickets currently assigned
+		for (int i = 0; i < technician.size(); i++) {
+			if (tech == null && technician.get(i).level == level) {
+				tech = technician.get(i);
+			} else if (technician.get(i).level == level && technician.get(i).assignedTickets.size() < tech.assignedTickets.size()) {
+				tech = technician.get(i);
+			}
+		}
+		//If others techs have the same amount of tickets add them to the lowestTickets List
+		if(tech != null) {
+			for (int i = 0; i < technician.size(); i++) {
+				if(technician.get(i).level == level && technician.get(i).assignedTickets.size() == tech.assignedTickets.size()) {
+					lowestTickets.add(technician.get(i));
+				}
+			}
+		}
+		//Assign a randome tech amongst the list of techs with the lowest tickets
+		if(lowestTickets.size() > 1) {
+			Random rand = new Random();
+			int upperbound = lowestTickets.size();
+			int random = rand.nextInt(upperbound);
+			tech = lowestTickets.get(random);
+		}
+		ticket.setAssignedTo(tech);
+		tech.addTicket(ticket);
+		System.out.println("Ticket assigned to " + tech.firstName);
 	}
 
 	// ------------- Functions-------------
@@ -327,7 +360,7 @@ public class SEPMA2 {
 		System.out.println("Enter password:");
 		password = sc.nextLine();
 		while (!checkPasswordRequirments(password)) {
-			System.out.println("Password must contain an upper case, lower case and number:");
+			System.out.println("Password must contain an upper case, lower case, number and be minimum 20 characters:");
 			password = sc.nextLine();
 			checkPasswordRequirments(password);
 		}
@@ -336,7 +369,7 @@ public class SEPMA2 {
 		MainMenu();
 	}
 
-	// check the input email does not already exist in the system
+	// Check the input email does not already exist in the system
 	private boolean checkEmailIsUnique(String email) {
 		for (int i = 0; i < this.staff.size(); i++) {
 			if (this.staff.get(i).email.equals(email)) {
@@ -430,9 +463,8 @@ public class SEPMA2 {
 				}
 
 				this.tickets.add(ticket);
-				this.staff.stream().filter(x -> x.email.equalsIgnoreCase(ticketData[1])).findFirst().get()
-						.addTicket(ticket);
-
+				/*this.staff.stream().filter(x -> x.email.equalsIgnoreCase(ticketData[1])).findFirst().get()
+				.addTicket(ticket);*/
 			}
 
 			myReader.close();
