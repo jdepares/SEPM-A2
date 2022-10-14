@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 abstract class User {
 
 	protected boolean CheckPassword(String password, String userInput) {
-		return password.equals(userInput)  ? true : false;
+		return password.equals(userInput) ? true : false;
 	}
 
 	protected boolean NewUser(boolean staff, String firstName, String lastName, String email, String password,
@@ -24,8 +24,8 @@ abstract class User {
 		try {
 			FileWriter myWriter = new FileWriter(dir, true);
 			BufferedWriter bw = new BufferedWriter(myWriter);
-			//myWriter.write(content + "\n");
-			//myWriter.close();
+			// myWriter.write(content + "\n");
+			// myWriter.close();
 			bw.append(content);
 			bw.close();
 			return true;
@@ -34,6 +34,6 @@ abstract class User {
 		}
 
 	}
-	
+
 	protected abstract void ChangePassword(String email, String newPassword) throws IOException, FileNotFoundException;
 }

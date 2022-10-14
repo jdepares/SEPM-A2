@@ -1,12 +1,9 @@
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
 enum Severity {
-	LOW, HIGH
+	LOW, MEDIUM, HIGH
 }
 
 enum Status {
@@ -65,41 +62,6 @@ public class Ticket {
 
 	}
 
-	public void changeStatus(String ticketNum, String newStatus) throws IOException, FileNotFoundException {
-
-		String fileName = "./src/Files/Tickets.txt";
-		String data = "";
-		String[] lineData;
-		String[] ticketRecord = null;
-
-		BufferedReader br = new BufferedReader(new FileReader(fileName));
-
-		String line;
-
-		while ((line = br.readLine()) != null) {
-			lineData = line.split(",");
-
-			if (lineData[0].equals(ticketNum)) {
-				ticketRecord = lineData;
-			} else {
-				data += line;
-			}
-		}
-
-		if (ticketRecord != null) {
-			ticketRecord[6] = newStatus;
-
-			FileWriter myWriter = new FileWriter(fileName, false);
-			BufferedWriter bw = new BufferedWriter(myWriter);
-
-			bw.write(data);
-			bw.append(String.format("\n%s,%s,%s,%s,%s,%s,%s", ticketRecord[0], ticketRecord[1], ticketRecord[2], 
-					ticketRecord[3], ticketRecord[4], ticketRecord[5], ticketRecord[6]));
-			bw.close();
-		}
-
-	}
-
 	public void setAssignedTo(Technician assignedTo) {
 		this.assignedTo = assignedTo;
 	}
@@ -111,5 +73,4 @@ public class Ticket {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-
 }

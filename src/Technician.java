@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Technician extends User {
-	
+
 	public int level;
-	
+
 	public String firstName;
 	public String lastName;
 
@@ -31,7 +31,8 @@ public class Technician extends User {
 		super.NewUser(true, firstName, lastName, email, password, phone);
 	}
 
-	public Technician(boolean startUp, int level, String firstName, String lastName, String email, String password, String phone) {
+	public Technician(boolean startUp, int level, String firstName, String lastName, String email, String password,
+			String phone) {
 		super();
 		this.level = level;
 		this.firstName = firstName;
@@ -52,45 +53,45 @@ public class Technician extends User {
 	@Override
 	protected void ChangePassword(String email, String newPassword) throws IOException, FileNotFoundException {
 		this.password = newPassword;
-		
+
 		String fileName = "./src/Files/Technicians.txt";
 		String data = "";
 		String[] lineData;
 		String emailRecord;
 		String[] userRecord = null;
-		
-		
+
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
-		
+
 		String line;
-		
+
 		while ((line = br.readLine()) != null) {
-			
+
 			lineData = line.split(",");
 			emailRecord = lineData[3];
-			
+
 			if (emailRecord.equals(email)) {
-				userRecord = lineData;			
+				userRecord = lineData;
 			} else {
 				data += line + "\n";
 			}
 		}
-		
+
 		// Write data to file
 		if (userRecord != null) {
 			userRecord[4] = newPassword;
-			
+
 			FileWriter myWriter = new FileWriter(fileName, false);
 			BufferedWriter bw = new BufferedWriter(myWriter);
-			//myWriter.write(content + "\n");
-			//myWriter.close();
+			// myWriter.write(content + "\n");
+			// myWriter.close();
 
 			bw.write(data);
-			bw.append(String.format("%s,%s,%s,%s,%s,%s", userRecord[0], userRecord[1], userRecord[2], userRecord[3], userRecord[4], userRecord[5]));
+			bw.append(String.format("%s,%s,%s,%s,%s,%s", userRecord[0], userRecord[1], userRecord[2], userRecord[3],
+					userRecord[4], userRecord[5]));
 			bw.close();
 		}
 	}
-	
+
 	public void addTicket(Ticket ticket) {
 		this.assignedTickets.add(ticket);
 	}

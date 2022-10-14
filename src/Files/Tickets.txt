@@ -1,2 +1,4 @@
-102,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test Subject,Test,HIGH,Closed
-101,S3851480@student.rmit.edu.au,,Test Subject,Test,LOW,Unresolved
+101,jennifer@gmail.com,hpayne@paudent.rmit.edu.au,Login button wrong colour,Login button is supposed to be red normally and blue on click,LOW,Archived
+102,jennifer@gmail.com,hstyles@student.rmit.edu.au,Text goes off screen,Text goes outside of box and continues off the screen,MEDIUM,Closed
+103,jennifer@gmail.com,htomlinson@toudent.rmit.edu.au,Images far too large,Images are 10 times too large for the screen they are on,HIGH,Open
+104,jennifer@gmail.com,htomlinson@toudent.rmit.edu.au,Testing adding tickets after logging out then back in,As description,HIGH,Archived

@@ -1,5 +1,9 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -44,26 +48,26 @@ public class SEPMA2 {
 		while (input != 4) {
 
 			switch (input) {
-			case 1:
-				if (login()) {
-					if (this.currentUser instanceof Staff) {
+				case 1:
+					if (login()) {
+						if (this.currentUser instanceof Staff) {
 
-						StaffLoginMenu();
+							StaffLoginMenu();
+						} else {
+
+							TechLoginMenu();
+						}
+
+						break;
 					} else {
-
-						TechLoginMenu();
+						break;
 					}
-
+				case 2:
+					forgotPassword();
 					break;
-				} else {
+				case 3:
+					createAccount();
 					break;
-				}
-			case 2:
-				forgotPassword();
-				break;
-			case 3:
-				createAccount();
-				break;
 
 			}
 			System.out.println(mainMenu);
@@ -89,15 +93,15 @@ public class SEPMA2 {
 		while (input != 4) {
 
 			switch (input) {
-			case 1:
-				break;
-			case 2:
-				newTicket();
+				case 1:
+					break;
+				case 2:
+					newTicket();
 
-				break;
-			case 3:
-				logout();
-				break;
+					break;
+				case 3:
+					logout();
+					break;
 
 			}
 			System.out.println(menu);
@@ -109,77 +113,152 @@ public class SEPMA2 {
 	public void TechLoginMenu() {
 		Technician currentUser = (Technician) this.currentUser;
 
-		String menu = "--------------------------\nWelcome\n--------------------------\n" + 
-		"1. Change Ticket Status\n2. Logout";
-		String input = "";
+		String menu = "--------------------------\nWelcome\n--------------------------\n" +
+				"1. Change Ticket Status\n"
+				+ "2. Change Ticket Severity\n"
+				+ "3. Logout\n";
+		String menuInput = "";
 
-		while (!input.equals("2")) {
+		while (!menuInput.equals("3")) {
 
 			System.out.println(menu);
-			input = sc.nextLine();
+			menuInput = sc.nextLine();
 
-			switch (input) {
-			case "1":
-				System.out.println("Enter ticket number: ");
-				int ticketNum = Integer.parseInt(sc.nextLine());
-				Ticket ticket = null;
+			switch (menuInput) {
+				case "1":
+					System.out.println("Enter ticket number: ");
+					int ticketNum = Integer.parseInt(sc.nextLine());
+					Ticket ticket = null;
 
-				for (int i = 0; i < tickets.size(); i += 1) {
-					if (tickets.get(i).ticketNumber == ticketNum) {
-						ticket = tickets.get(i);
-					}
-				}
-
-				if (ticket != null) {
-					System.out.println(String.format("Ticket: %s\nSubject: %s\nDescription: %s\n", ticket.ticketNumber,
-							ticket.subject, ticket.description));
-					System.out.println(
-							"Select new status: \n1. Open\n2. Closed\n3. Unresolved\n4. Resolved\n5. Archived\n");
-					input = sc.nextLine();
-					Boolean error = false;
-
-					try {
-						switch (input) {
-						case "1":
-							ticket.setStatus(Status.Open);
-							ticket.changeStatus(String.valueOf(ticketNum), "Open");
-							break;
-						case "2":
-							ticket.setStatus(Status.Closed);
-							ticket.changeStatus(String.valueOf(ticketNum), "Closed");
-							break;
-						case "3":
-							ticket.setStatus(Status.Unresolved);
-							ticket.changeStatus(String.valueOf(ticketNum), "Unresolved");
-							break;
-						case "4":
-							ticket.setStatus(Status.Resolved);
-							ticket.changeStatus(String.valueOf(ticketNum), "Resolved");
-							break;
-						case "5":
-							ticket.setStatus(Status.Archived);
-							ticket.changeStatus(String.valueOf(ticketNum), "Archived");
-							break;
-						default:
-							error = true;
-							break;
+					for (int i = 0; i < tickets.size(); i += 1) {
+						if (tickets.get(i).ticketNumber == ticketNum) {
+							ticket = tickets.get(i);
 						}
-					} catch (IOException e) {
-						System.out.println("Error: Cannot access system records");
 					}
 
-					if (error) {
-						System.out.println("Error: Invalid selection.");
+					if (ticket != null) {
+						System.out.println(
+								String.format("Ticket: %s\nSubject: %s\nDescription: %s\n", ticket.ticketNumber,
+										ticket.subject, ticket.description));
+						System.out.println(
+								"Select new status: \n1. Open\n2. Closed\n3. Unresolved\n4. Resolved\n5. Archived\n");
+						String statusInput = sc.nextLine();
+						Boolean error = false;
+
+						try {
+							switch (statusInput) {
+								case "1":
+									ticket.setStatus(Status.Open);
+									break;
+								case "2":
+									ticket.setStatus(Status.Closed);
+									break;
+								case "3":
+									ticket.setStatus(Status.Unresolved);
+									break;
+								case "4":
+									ticket.setStatus(Status.Resolved);
+									break;
+								case "5":
+									ticket.setStatus(Status.Archived);
+									break;
+								default:
+									error = true;
+									break;
+							}
+							refreshTickets();
+						} catch (IOException e) {
+							System.out.println("Error: Cannot access system records");
+						}
+
+						if (error) {
+							System.out.println("Error: Invalid selection.");
+						} else {
+							System.out.println("Ticket status changed.");
+						}
+
 					} else {
-						System.out.println("Ticket status changed.");
+						System.out.println(String.format("Ticket number %s does not exist.", ticketNum));
 					}
+					break;
+				case "2":
+					System.out.println("Which ticket would you like to change: ");
+					ticketNum = Integer.parseInt(sc.nextLine());
+					ticket = null;
 
-				} else {
-					System.out.println(String.format("Ticket number %s does not exist.", ticketNum));
-				}
+					for (int i = 0; i < tickets.size(); i += 1) {
+						if (tickets.get(i).ticketNumber == ticketNum) {
+							ticket = tickets.get(i);
+						}
+					}
+					if (ticket != null) {
+						System.out.println(String.format(
+								"Ticket number: %s\nAssigned to: %s\nSubject: %s\nDescription: %s\nSeverity: %s",
+								ticket.ticketNumber,
+								ticket.assignedTo.firstName, ticket.subject, ticket.description, ticket.severity));
+						System.out.println(
+								"New severity level: \n1. Low\n2. Medium\n3. High\n");
+						String newSeverity = sc.nextLine();
+						String oldSeverity = ticket.severity.toString();
+
+						try {
+							switch (newSeverity) {
+								case "1":
+									ticket.setSeverity(Severity.LOW);
+									break;
+								case "2":
+									ticket.setSeverity(Severity.MEDIUM);
+									break;
+								case "3":
+									ticket.setSeverity(Severity.HIGH);
+									break;
+								default:
+									System.out.println(String.format("Out of bounds."));
+									break;
+							}
+							refreshTickets();
+						} catch (IOException e) {
+							System.out.println("Error: Cannot access system records");
+						}
+
+						// If severity LEVEL has changed, a new technician will need to be assigned
+						if (!isSameLevel(ticket.severity, oldSeverity)) {
+							if (ticket.severity.toString() == "HIGH") {
+								assignTicket(ticket, 2);
+							} else {
+								assignTicket(ticket, 1);
+							}
+							try {
+								refreshTickets();
+							} catch (IOException e) {
+								System.out.println("Error: Cannot access system records");
+							}
+						}
+						System.out.println("Ticket severity level changed.");
+						System.out.println(String.format(
+								"Ticket number: %s\nAssigned to: %s\nSubject: %s\nDescription: %s\nSeverity: %s",
+								ticket.ticketNumber,
+								ticket.assignedTo.firstName, ticket.subject, ticket.description, ticket.severity));
+					}
 			}
 		}
+	}
 
+	private boolean isSameLevel(Severity oldSeverity, String newSeverity) {
+
+		if (oldSeverity.toString() == "HIGH" && newSeverity != "HIGH") {
+			return false;
+		}
+
+		if (oldSeverity.toString() == "MEDIUM" && newSeverity == "HIGH") {
+			return false;
+		}
+
+		if (oldSeverity.toString() == "LOW" && newSeverity == "HIGH") {
+			return false;
+		}
+
+		return true;
 	}
 
 	public void newTicket() {
@@ -192,12 +271,27 @@ public class SEPMA2 {
 
 		String sev = """
 				1. Low
-				2. High""";
+				2. Medium
+				3. High""";
 
 		System.out.println(sev);
 		int severity = Integer.parseInt(sc.nextLine());
 
-		Severity severityEnum = severity == 1 ? Severity.LOW : Severity.HIGH;
+		// Severity severityEnum = severity == 1 ? Severity.LOW : Severity.HIGH;
+
+		Severity severityEnum;
+		int level;
+
+		if (severity == 1) {
+			level = 1;
+			severityEnum = Severity.LOW;
+		} else if (severity == 2) {
+			level = 1;
+			severityEnum = Severity.MEDIUM;
+		} else {
+			level = 2;
+			severityEnum = Severity.HIGH;
+		}
 
 		Ticket ticket = new Ticket(
 				true, this.tickets.size() + 101, this.staff.stream()
@@ -205,33 +299,39 @@ public class SEPMA2 {
 				subject, description, severityEnum);
 
 		this.tickets.add(ticket);
-		/*this.staff.stream().filter(x -> x.email.equalsIgnoreCase(((Staff)this.currentUser).email)).findFirst().get()
-		.addTicket(ticket);*/
-		assignTicket(ticket, severity);
+		/*
+		 * this.staff.stream().filter(x ->
+		 * x.email.equalsIgnoreCase(((Staff)this.currentUser).email)).findFirst().get()
+		 * .addTicket(ticket);
+		 */
+		assignTicket(ticket, level);
 
 	}
 
 	private void assignTicket(Ticket ticket, int level) {
 		Technician tech = null;
 		List<Technician> lowestTickets = new ArrayList<>();
-		//Find tech with the lowest tickets currently assigned
+		// Find tech with the lowest tickets currently assigned
 		for (int i = 0; i < technician.size(); i++) {
 			if (tech == null && technician.get(i).level == level) {
 				tech = technician.get(i);
-			} else if (technician.get(i).level == level && technician.get(i).assignedTickets.size() < tech.assignedTickets.size()) {
+			} else if (technician.get(i).level == level
+					&& technician.get(i).assignedTickets.size() < tech.assignedTickets.size()) {
 				tech = technician.get(i);
 			}
 		}
-		//If others techs have the same amount of tickets add them to the lowestTickets List
-		if(tech != null) {
+		// If others techs have the same amount of tickets add them to the lowestTickets
+		// List
+		if (tech != null) {
 			for (int i = 0; i < technician.size(); i++) {
-				if(technician.get(i).level == level && technician.get(i).assignedTickets.size() == tech.assignedTickets.size()) {
+				if (technician.get(i).level == level
+						&& technician.get(i).assignedTickets.size() == tech.assignedTickets.size()) {
 					lowestTickets.add(technician.get(i));
 				}
 			}
 		}
-		//Assign a randome tech amongst the list of techs with the lowest tickets
-		if(lowestTickets.size() > 1) {
+		// Assign a randome tech amongst the list of techs with the lowest tickets
+		if (lowestTickets.size() > 1) {
 			Random rand = new Random();
 			int upperbound = lowestTickets.size();
 			int random = rand.nextInt(upperbound);
@@ -239,7 +339,30 @@ public class SEPMA2 {
 		}
 		ticket.setAssignedTo(tech);
 		tech.addTicket(ticket);
+		try {
+			refreshTickets();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		System.out.println("Ticket assigned to " + tech.firstName);
+	}
+
+	public void refreshTickets() throws IOException {
+		String fileName = "./src/Files/Tickets.txt";
+		FileWriter myWriter = new FileWriter(fileName, false);
+		BufferedWriter bw = new BufferedWriter(myWriter);
+
+		for (int i = 0; i < tickets.size(); i++) {
+			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s\n",
+					tickets.get(i).ticketNumber,
+					tickets.get(i).createdBy.email,
+					tickets.get(i).assignedTo.email,
+					tickets.get(i).subject,
+					tickets.get(i).description,
+					tickets.get(i).severity,
+					tickets.get(i).status));
+		}
+		bw.close();
 	}
 
 	// ------------- Functions-------------
@@ -463,8 +586,11 @@ public class SEPMA2 {
 				}
 
 				this.tickets.add(ticket);
-				/*this.staff.stream().filter(x -> x.email.equalsIgnoreCase(ticketData[1])).findFirst().get()
-				.addTicket(ticket);*/
+				/*
+				 * this.staff.stream().filter(x ->
+				 * x.email.equalsIgnoreCase(ticketData[1])).findFirst().get()
+				 * .addTicket(ticket);
+				 */
 			}
 
 			myReader.close();
