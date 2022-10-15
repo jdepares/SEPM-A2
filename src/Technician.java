@@ -95,4 +95,8 @@ public class Technician extends User {
 	public void addTicket(Ticket ticket) {
 		this.assignedTickets.add(ticket);
 	}
+
+	public void removeTicket(Ticket ticket){
+		this.assignedTickets.remove(ticket);
+	}
 }
