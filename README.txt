@@ -32,9 +32,11 @@ Opening the Code in Eclipse
 21. In the “Projects:” section ensure “SEPM-A2 ([filepath])” is ticked.
 22. Click “Finish”
 23. The project will now appear in the “Project Explorer” section on the left.
-24. Double click the SEPMA2.java file to open it.
-25. Now that SEPM is open in the main window, right click the window -> "Run As" -> Java Application
-26. After you have run it once, you can begin running it by pressing the green arrow button in the main menu instead. Either press the arrow button dirctly, or click its drop-down arrow and run SEPMA2. 
+
+Running the code
+1. Double click the SEPMA2.java file to open it.
+2. Now that SEPM is open in the main window, right click the window -> "Run As" -> Java Application
+3. After you have run it once, you can begin running it by pressing the green arrow button in the main menu instead. Either press the arrow button dirctly, or click its drop-down arrow and run SEPMA2. 
 
 Troubleshooting
 If you are downloading the code again, remember to delete the old version from Eclipse. You can do this by:
