@@ -24,8 +24,6 @@ abstract class User {
 		try {
 			FileWriter myWriter = new FileWriter(dir, true);
 			BufferedWriter bw = new BufferedWriter(myWriter);
-			// myWriter.write(content + "\n");
-			// myWriter.close();
 			bw.append(content);
 			bw.close();
 			return true;

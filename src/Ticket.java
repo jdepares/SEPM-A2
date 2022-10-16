@@ -52,8 +52,6 @@ public class Ticket {
 			try {
 				FileWriter myWriter = new FileWriter(dir, true);
 				BufferedWriter bw = new BufferedWriter(myWriter);
-				// myWriter.write(content + "\n");
-				// myWriter.close();
 				bw.append(content);
 				bw.close();
 			} catch (IOException e) {

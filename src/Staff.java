@@ -76,15 +76,13 @@ public class Staff extends User {
 
 			FileWriter myWriter = new FileWriter(fileName, false);
 			BufferedWriter bw = new BufferedWriter(myWriter);
-			// myWriter.write(content + "\n");
-			// myWriter.close();
 
 			bw.write(data);
 			bw.append(String.format("%s,%s,%s,%s,%s", userRecord[0], userRecord[1], userRecord[2], userRecord[3],
 					userRecord[4]));
 			bw.close();
 		}
-
+		br.close();
 	}
 
 	public void addTicket(Ticket ticket) {

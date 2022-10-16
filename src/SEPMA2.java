@@ -1,15 +1,11 @@
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 public class SEPMA2 {
@@ -33,15 +29,11 @@ public class SEPMA2 {
 	// -------------Menus----------------
 	public void MainMenu() {
 
-		String mainMenu = """
-				--------------------------
-				Welcome
-				--------------------------
-				1. Login
-				2. Forgot Password
-				3. Create Account
-				4. Exit
-				""";
+		String mainMenu = "Welcome \n" 
+		+ "1. Login\n"
+		+ "2. Forgot Password\n"
+		+ "3. Create Account\n"
+		+ "4. Exit\n";
 
 		int input = 0;
 
@@ -51,13 +43,10 @@ public class SEPMA2 {
 				case 1:
 					if (login()) {
 						if (this.currentUser instanceof Staff) {
-
 							StaffLoginMenu();
 						} else {
-
 							TechLoginMenu();
 						}
-
 						break;
 					} else {
 						break;
@@ -79,15 +68,11 @@ public class SEPMA2 {
 
 		Staff currentUser = (Staff) this.currentUser;
 
-		String menu = """
-				--------------------------
-				Welcome""" + " " + currentUser.firstName + " " + currentUser.lastName.toUpperCase() + "\n" + """
-				--------------------------
-				1. Dashboard
-				2. New Ticket
-				3. Logout
-				4. Exit
-				""";
+		String menu = "Welcome " + currentUser.firstName + " " + currentUser.lastName.toUpperCase() + "\n" 
+		+ "1. Dashboard\n"
+		+ "2. New Ticket\n"
+		+ "3. Logout\n"
+		+ "4. Exit\n";
 
 		int input = 0;
 		while (input != 4) {
@@ -97,22 +82,17 @@ public class SEPMA2 {
 					break;
 				case 2:
 					newTicket();
-
 					break;
 				case 3:
 					logout();
 					break;
-
 			}
 			System.out.println(menu);
 			input = Integer.parseInt(sc.nextLine());
 		}
-
 	}
 
 	public void TechLoginMenu() {
-		Technician currentUser = (Technician) this.currentUser;
-
 		String menu = "--------------------------\nWelcome\n--------------------------\n" +
 				"1. Change Ticket Status\n"
 				+ "2. Change Ticket Severity\n"
@@ -277,8 +257,6 @@ public class SEPMA2 {
 		System.out.println(sev);
 		int severity = Integer.parseInt(sc.nextLine());
 
-		// Severity severityEnum = severity == 1 ? Severity.LOW : Severity.HIGH;
-
 		Severity severityEnum;
 		int level;
 
@@ -299,11 +277,6 @@ public class SEPMA2 {
 				subject, description, severityEnum);
 
 		this.tickets.add(ticket);
-		/*
-		 * this.staff.stream().filter(x ->
-		 * x.email.equalsIgnoreCase(((Staff)this.currentUser).email)).findFirst().get()
-		 * .addTicket(ticket);
-		 */
 		assignTicket(ticket, level);
 
 	}
@@ -405,7 +378,6 @@ public class SEPMA2 {
 
 	public void forgotPassword() {
 		String email, newPassword;
-		Boolean match = false;
 		User user = null;
 
 		System.out.println("--------------------------");
@@ -582,15 +554,8 @@ public class SEPMA2 {
 				if (!ticketData[2].equals("")) {
 					ticket.setAssignedTo(this.technician.stream().filter(x -> x.email.equalsIgnoreCase(ticketData[2]))
 							.findFirst().get());
-
 				}
-
 				this.tickets.add(ticket);
-				/*
-				 * this.staff.stream().filter(x ->
-				 * x.email.equalsIgnoreCase(ticketData[1])).findFirst().get()
-				 * .addTicket(ticket);
-				 */
 			}
 
 			myReader.close();
