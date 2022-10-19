@@ -79,6 +79,17 @@ public class SEPMA2 {
 
 			switch (input) {
 				case 1:
+					System.out.println("--------------------\nActive Tickets\n--------------------\n");
+					
+					for (int i = 0; i < this.tickets.size(); i += 1) {
+						if (this.tickets.get(i).createdBy == currentUser && this.tickets.get(i).status != Status.Closed) {
+							Ticket ticket = this.tickets.get(i);
+							System.out.println(String.format("Ticket Number: %d\nSubject: %s\nStatus: %s\n", ticket.ticketNumber, ticket.subject, ticket.status));
+						}
+					}
+					
+					System.out.println("\nPress any key to continue...");
+					sc.nextLine();
 					break;
 				case 2:
 					newTicket();

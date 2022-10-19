@@ -39,8 +39,6 @@ public class Staff extends User {
 	}
 
 	public boolean CheckPassword(String password) {
-		System.out.println(this.password);
-		System.out.println(password);
 		return super.CheckPassword(password, this.password);
 	}
 
