@@ -13,6 +13,7 @@ public class SEPMA2 {
 	public User currentUser;
 
 	public List<Staff> staff = new ArrayList<>();
+	public List<Admin> admin = new ArrayList<>();
 	public List<Technician> technician = new ArrayList<>();
 	public List<Ticket> tickets = new ArrayList<>();
 	Scanner sc = new Scanner(System.in);
@@ -21,7 +22,6 @@ public class SEPMA2 {
 
 		// Import data from text files
 		startUp();
-
 		MainMenu();
 
 	}
@@ -29,34 +29,33 @@ public class SEPMA2 {
 	// -------------Menus----------------
 	public void MainMenu() {
 
-		String mainMenu = "Welcome \n" 
-		+ "1. Login\n"
-		+ "2. Forgot Password\n"
-		+ "3. Create Account\n"
-		+ "4. Exit\n";
+		String mainMenu = "Welcome \n" + "1. Login\n" + "2. Forgot Password\n" + "3. Create Account\n" + "4. Exit\n";
 
 		int input = 0;
 
 		while (input != 4) {
 
 			switch (input) {
-				case 1:
-					if (login()) {
-						if (this.currentUser instanceof Staff) {
-							StaffLoginMenu();
-						} else {
-							TechLoginMenu();
-						}
-						break;
+			case 1:
+				if (login()) {
+					if (this.currentUser instanceof Staff) {
+						StaffLoginMenu();
+					} else if (this.currentUser instanceof Technician) {
+						TechLoginMenu();
 					} else {
-						break;
+						adminLogin();
+
 					}
-				case 2:
-					forgotPassword();
 					break;
-				case 3:
-					createAccount();
+				} else {
 					break;
+				}
+			case 2:
+				forgotPassword();
+				break;
+			case 3:
+				createAccount();
+				break;
 
 			}
 			System.out.println(mainMenu);
@@ -68,35 +67,34 @@ public class SEPMA2 {
 
 		Staff currentUser = (Staff) this.currentUser;
 
-		String menu = "Welcome " + currentUser.firstName + " " + currentUser.lastName.toUpperCase() + "\n" 
-		+ "1. Dashboard\n"
-		+ "2. New Ticket\n"
-		+ "3. Logout\n"
-		+ "4. Exit\n";
+		String menu = "Welcome " + currentUser.firstName + " " + currentUser.lastName.toUpperCase() + "\n"
+				+ "1. Dashboard\n" + "2. New Ticket\n" + "3. Logout\n" + "4. Exit\n";
 
 		int input = 0;
 		while (input != 4) {
 
 			switch (input) {
-				case 1:
-					System.out.println("--------------------\nActive Tickets\n--------------------\n");
-					
-					for (int i = 0; i < this.tickets.size(); i += 1) {
-						if (this.tickets.get(i).createdBy == currentUser && this.tickets.get(i).status != Status.Closed) {
-							Ticket ticket = this.tickets.get(i);
-							System.out.println(String.format("Ticket Number: %d\nSubject: %s\nStatus: %s\n", ticket.ticketNumber, ticket.subject, ticket.status));
-						}
+			case 1:
+				System.out.println("--------------------\nActive Tickets\n--------------------\n");
+
+				for (int i = 0; i < this.tickets.size(); i += 1) {
+					if (this.tickets.get(i).createdBy == currentUser && this.tickets.get(i).status != Status.Closed) {
+						Ticket ticket = this.tickets.get(i);
+						System.out.println(String.format(
+								"Date: %s\nTicket Number: %d\nSubject: %s\nStatus: %s\nDescription: %s\n", ticket.date,
+								ticket.ticketNumber, ticket.subject, ticket.description, ticket.status));
 					}
-					
-					System.out.println("\nPress any key to continue...");
-					sc.nextLine();
-					break;
-				case 2:
-					newTicket();
-					break;
-				case 3:
-					logout();
-					break;
+				}
+
+				System.out.println("\nPress any key to continue...");
+				sc.nextLine();
+				break;
+			case 2:
+				newTicket();
+				break;
+			case 3:
+				logout();
+				break;
 			}
 			System.out.println(menu);
 			input = Integer.parseInt(sc.nextLine());
@@ -104,10 +102,8 @@ public class SEPMA2 {
 	}
 
 	public void TechLoginMenu() {
-		String menu = "--------------------------\nWelcome\n--------------------------\n" +
-				"1. Change Ticket Status\n"
-				+ "2. Change Ticket Severity\n"
-				+ "3. Logout\n";
+		String menu = "--------------------------\nWelcome\n--------------------------\n" + "1. Change Ticket Status\n"
+				+ "2. Change Ticket Severity\n" + "3. Logout\n";
 		String menuInput = "";
 
 		while (!menuInput.equals("3")) {
@@ -116,123 +112,126 @@ public class SEPMA2 {
 			menuInput = sc.nextLine();
 
 			switch (menuInput) {
-				case "1":
-					System.out.println("Enter ticket number: ");
-					int ticketNum = Integer.parseInt(sc.nextLine());
-					Ticket ticket = null;
+			case "1":
+				System.out.println("Enter ticket number: ");
+				int ticketNum = Integer.parseInt(sc.nextLine());
+				Ticket ticket = null;
 
-					for (int i = 0; i < tickets.size(); i += 1) {
-						if (tickets.get(i).ticketNumber == ticketNum) {
-							ticket = tickets.get(i);
+				for (int i = 0; i < tickets.size(); i += 1) {
+					if (tickets.get(i).ticketNumber == ticketNum) {
+						ticket = tickets.get(i);
+					}
+				}
+
+				if (ticket != null) {
+					System.out.println(String.format("Ticket: %s\nSubject: %s\nDescription: %s\n", ticket.ticketNumber,
+							ticket.subject, ticket.description));
+					System.out.println(
+							"Select new status: \n1. Open\n2. Closed\n3. Unresolved\n4. Resolved\n5. Archived\n");
+					String statusInput = sc.nextLine();
+					Boolean error = false;
+
+					try {
+						switch (statusInput) {
+						case "1":
+							ticket.setStatus(Status.Open);
+							break;
+						case "2":
+							ticket.setStatus(Status.Closed);
+							break;
+						case "3":
+							ticket.setStatus(Status.Unresolved);
+							break;
+						case "4":
+							ticket.setStatus(Status.Resolved);
+							break;
+						case "5":
+							ticket.setStatus(Status.Archived);
+							break;
+						default:
+							error = true;
+							break;
 						}
+						refreshTickets();
+					} catch (IOException e) {
+						System.out.println("Error: Cannot access system records");
 					}
 
-					if (ticket != null) {
-						System.out.println(
-								String.format("Ticket: %s\nSubject: %s\nDescription: %s\n", ticket.ticketNumber,
-										ticket.subject, ticket.description));
-						System.out.println(
-								"Select new status: \n1. Open\n2. Closed\n3. Unresolved\n4. Resolved\n5. Archived\n");
-						String statusInput = sc.nextLine();
-						Boolean error = false;
-
-						try {
-							switch (statusInput) {
-								case "1":
-									ticket.setStatus(Status.Open);
-									break;
-								case "2":
-									ticket.setStatus(Status.Closed);
-									break;
-								case "3":
-									ticket.setStatus(Status.Unresolved);
-									break;
-								case "4":
-									ticket.setStatus(Status.Resolved);
-									break;
-								case "5":
-									ticket.setStatus(Status.Archived);
-									break;
-								default:
-									error = true;
-									break;
-							}
-							refreshTickets();
-						} catch (IOException e) {
-							System.out.println("Error: Cannot access system records");
-						}
-
-						if (error) {
-							System.out.println("Error: Invalid selection.");
-						} else {
-							System.out.println("Ticket status changed.");
-						}
-
+					if (error) {
+						System.out.println("Error: Invalid selection.");
 					} else {
-						System.out.println(String.format("Ticket number %s does not exist.", ticketNum));
+						System.out.println("Ticket status changed.");
 					}
-					break;
-				case "2":
-					System.out.println("Which ticket would you like to change: ");
-					ticketNum = Integer.parseInt(sc.nextLine());
-					ticket = null;
 
-					for (int i = 0; i < tickets.size(); i += 1) {
-						if (tickets.get(i).ticketNumber == ticketNum) {
-							ticket = tickets.get(i);
+				} else {
+					System.out.println(String.format("Ticket number %s does not exist.", ticketNum));
+				}
+				break;
+			case "2":
+				System.out.println("Which ticket would you like to change: ");
+				ticketNum = Integer.parseInt(sc.nextLine());
+				ticket = null;
+
+				for (int i = 0; i < tickets.size(); i += 1) {
+					if (tickets.get(i).ticketNumber == ticketNum) {
+						ticket = tickets.get(i);
+					}
+				}
+				if (ticket != null) {
+					System.out.println(String.format(
+							"Ticket number: %s\nAssigned to: %s\nSubject: %s\nDescription: %s\nSeverity: %s",
+							ticket.ticketNumber, ticket.assignedTo.firstName, ticket.subject, ticket.description,
+							ticket.severity));
+					System.out.println("New severity level: \n1. Low\n2. Medium\n3. High\n");
+					String newSeverity = sc.nextLine();
+					String oldSeverity = ticket.severity.toString();
+
+					try {
+						switch (newSeverity) {
+						case "1":
+							ticket.setSeverity(Severity.LOW);
+							break;
+						case "2":
+							ticket.setSeverity(Severity.MEDIUM);
+							break;
+						case "3":
+							ticket.setSeverity(Severity.HIGH);
+							break;
+						default:
+							System.out.println(String.format("Out of bounds."));
+							break;
 						}
+						refreshTickets();
+					} catch (IOException e) {
+						System.out.println("Error: Cannot access system records");
 					}
-					if (ticket != null) {
-						System.out.println(String.format(
-								"Ticket number: %s\nAssigned to: %s\nSubject: %s\nDescription: %s\nSeverity: %s",
-								ticket.ticketNumber,
-								ticket.assignedTo.firstName, ticket.subject, ticket.description, ticket.severity));
-						System.out.println(
-								"New severity level: \n1. Low\n2. Medium\n3. High\n");
-						String newSeverity = sc.nextLine();
-						String oldSeverity = ticket.severity.toString();
 
+					// If severity LEVEL has changed, a new technician will need to be assigned
+					if (!isSameLevel(ticket.severity, oldSeverity)) {
+						if (ticket.severity.toString() == "HIGH") {
+							assignTicket(ticket, 2);
+						} else {
+							assignTicket(ticket, 1);
+						}
 						try {
-							switch (newSeverity) {
-								case "1":
-									ticket.setSeverity(Severity.LOW);
-									break;
-								case "2":
-									ticket.setSeverity(Severity.MEDIUM);
-									break;
-								case "3":
-									ticket.setSeverity(Severity.HIGH);
-									break;
-								default:
-									System.out.println(String.format("Out of bounds."));
-									break;
-							}
 							refreshTickets();
 						} catch (IOException e) {
 							System.out.println("Error: Cannot access system records");
 						}
-
-						// If severity LEVEL has changed, a new technician will need to be assigned
-						if (!isSameLevel(ticket.severity, oldSeverity)) {
-							if (ticket.severity.toString() == "HIGH") {
-								assignTicket(ticket, 2);
-							} else {
-								assignTicket(ticket, 1);
-							}
-							try {
-								refreshTickets();
-							} catch (IOException e) {
-								System.out.println("Error: Cannot access system records");
-							}
-						}
-						System.out.println("Ticket severity level changed.");
-						System.out.println(String.format(
-								"Ticket number: %s\nAssigned to: %s\nSubject: %s\nDescription: %s\nSeverity: %s",
-								ticket.ticketNumber,
-								ticket.assignedTo.firstName, ticket.subject, ticket.description, ticket.severity));
 					}
+					System.out.println("Ticket severity level changed.");
+					System.out.println(String.format(
+							"Ticket number: %s\nAssigned to: %s\nSubject: %s\nDescription: %s\nSeverity: %s",
+							ticket.ticketNumber, ticket.assignedTo.firstName, ticket.subject, ticket.description,
+							ticket.severity));
+				}
 			}
 		}
+	}
+
+	public void adminLogin() {
+		System.out.println("Hello World");
+
 	}
 
 	private boolean isSameLevel(Severity oldSeverity, String newSeverity) {
@@ -337,14 +336,9 @@ public class SEPMA2 {
 		BufferedWriter bw = new BufferedWriter(myWriter);
 
 		for (int i = 0; i < tickets.size(); i++) {
-			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s\n",
-					tickets.get(i).ticketNumber,
-					tickets.get(i).createdBy.email,
-					tickets.get(i).assignedTo.email,
-					tickets.get(i).subject,
-					tickets.get(i).description,
-					tickets.get(i).severity,
-					tickets.get(i).status));
+			bw.write(String.format("%s,%s,%s,%s,%s,%s,%s,%s\n", tickets.get(i).ticketNumber,
+					tickets.get(i).createdBy.email, tickets.get(i).assignedTo.email, tickets.get(i).subject,
+					tickets.get(i).description, tickets.get(i).severity, tickets.get(i).status, tickets.get(i).date));
 		}
 		bw.close();
 	}
@@ -548,6 +542,20 @@ public class SEPMA2 {
 			return false;
 		}
 
+		// Admin
+		try {
+			File myObj = new File("./src/Files/Admin.txt");
+			Scanner myReader = new Scanner(myObj);
+			while (myReader.hasNextLine()) {
+				String data = myReader.nextLine();
+				String[] user = data.split(",");
+				this.admin.add(new Admin(true, user[0], user[1], user[2], user[3], user[4]));
+
+			}
+			myReader.close();
+		} catch (FileNotFoundException e) {
+			return false;
+		}
 		// Tickets
 		try {
 			File myObj = new File("./src/Files/Tickets.txt");
@@ -558,7 +566,7 @@ public class SEPMA2 {
 
 				Ticket ticket = new Ticket(Integer.parseInt(ticketData[0]),
 						this.staff.stream().filter(x -> x.email.equalsIgnoreCase(ticketData[1])).findFirst().get(),
-						ticketData[3], ticketData[4], Severity.valueOf(ticketData[5]));
+						ticketData[3], ticketData[4], Severity.valueOf(ticketData[5]), ticketData[7]);
 
 				ticket.setStatus(Status.valueOf(ticketData[6]));
 
