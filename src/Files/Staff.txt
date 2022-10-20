@@ -1,0 +1,2 @@
+Ely,Hawkins,s3754457@student.rmit.edu.au,Abc123,0421795012
+Jacob,Depares,S3851480@student.rmit.edu.au,Hello!,0451820205
