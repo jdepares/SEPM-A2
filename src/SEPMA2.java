@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,11 +21,9 @@ public class SEPMA2 {
 	Scanner sc = new Scanner(System.in);
 
 	public SEPMA2() {
-
 		// Import data from text files
 		startUp();
 		MainMenu();
-
 	}
 
 	// -------------Menus----------------
@@ -124,6 +124,10 @@ public class SEPMA2 {
 				}
 
 				if (ticket != null) {
+					if(ticket.getStatus() == Status.Archived) {
+						System.out.println("Cannot change the status of an archived ticket");
+						TechLoginMenu();
+					}
 					System.out.println(String.format("Ticket: %s\nSubject: %s\nDescription: %s\n", ticket.ticketNumber,
 							ticket.subject, ticket.description));
 					System.out.println(
@@ -138,6 +142,7 @@ public class SEPMA2 {
 							break;
 						case "2":
 							ticket.setStatus(Status.Closed);
+							startTimer(ticket);
 							break;
 						case "3":
 							ticket.setStatus(Status.Unresolved);
@@ -227,6 +232,24 @@ public class SEPMA2 {
 				}
 			}
 		}
+	}
+	
+	//Archive closed ticket after 1 day of being closed
+	private void startTimer(Ticket ticket) {
+		Timer timer = new Timer();
+		TimerTask t = new TimerTask() {
+			@Override
+			public void run() {
+				ticket.setStatus(Status.Archived);
+				try {
+					refreshTickets();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				timer.cancel();
+			}
+		};
+		timer.scheduleAtFixedRate(t,1000 * 60 * 60 * 24,5);
 	}
 
 	public void adminLogin() {
@@ -586,9 +609,7 @@ public class SEPMA2 {
 	}
 
 	public static void main(String[] args) {
-
 		new SEPMA2();
-
 	}
 
 }
