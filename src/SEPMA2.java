@@ -265,10 +265,86 @@ public class SEPMA2 {
 		timer.scheduleAtFixedRate(t,1000 * 60 * 60 * 24,5);
 	}
 
-	public void adminLogin() {
-		System.out.println("Hello World");
+public void adminLogin() {
+		String mainMenu = "Welcome \n" + "1. Dashboard\n" + "2. Exit\n";
+
+		int input = 0;
+
+		while (input != 2) {
+
+			switch (input) {
+			case 1:
+				adminDashboard();
+				break;
+			}
+			System.out.println(mainMenu);
+			input = Integer.parseInt(sc.nextLine());
+		}
+	}
+
+	public void adminDashboard() {
+
+		System.out.println("Start Date (YYYY-MM-DD)");
+		String startDate = sc.nextLine();
+
+		System.out.println("End Date (YYYY-MM-DD)");
+		String endDate = sc.nextLine();
+
+		try {
+			int total = 0;
+			int open = 0;
+			int closed = 0;
+			int resolved = 0;
+			int unresolved = 0;
+			int archived = 0;
+
+			Date start = new SimpleDateFormat("yyyy-MM-dd").parse(startDate);
+			Date end = new SimpleDateFormat("yyyy-MM-dd").parse(endDate);
+
+			for (int i = 0; i < this.tickets.size(); i++) {
+
+				Date ticketDate = new SimpleDateFormat("yyyy-MM-dd").parse(this.tickets.get(i).date);
+				Status status = this.tickets.get(i).status;
+
+				if (ticketDate.after(start) && ticketDate.before(end)) {
+
+					switch (status) {
+
+					case Open:
+						open++;
+						break;
+					case Closed:
+						closed++;
+						break;
+					case Resolved:
+						resolved++;
+						break;
+					case Unresolved:
+						unresolved++;
+						break;
+					case Archived:
+						archived++;
+						break;
+
+					}
+
+					total++;
+
+				}
+
+			}
+
+			String results = "-------------\n" + "1. Total: " + total + "\n2. Open: " + open + "\n3. Closed: " + closed
+					+ "\n4. Resolved: " + resolved + "\n5. Unresolved: " + unresolved + "\n6. Archived: " + archived
+					+ "\n-------------\n";
+			System.out.println(results);
+		} catch (ParseException e) {
+
+		}
 
 	}
+
+
 
 	private boolean isSameLevel(Severity oldSeverity, String newSeverity) {
 
@@ -406,10 +482,24 @@ public class SEPMA2 {
 
 			this.currentUser = (Technician) this.technician.stream().filter(x -> x.email.equalsIgnoreCase(email))
 					.findFirst().get();
+		} else if (this.admin.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().isPresent()) {
+
+			succesfulLogin = this.admin.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst().get()
+					.CheckPassword(password);
+
+			this.currentUser = (Admin) this.admin.stream().filter(x -> x.email.equalsIgnoreCase(email)).findFirst()
+					.get();
 		}
 
 		return succesfulLogin;
 	}
+
+	public void logout() {
+		this.currentUser = null;
+		MainMenu();
+
+	}
+
 
 	public void logout() {
 		this.currentUser = null;
