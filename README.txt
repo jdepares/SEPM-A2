@@ -38,6 +38,12 @@ Running the code
 2. Now that SEPM is open in the main window, right click the window -> "Run As" -> Java Application
 3. After you have run it once, you can begin running it by pressing the green arrow button in the main menu instead. Either press the arrow button dirctly, or click its drop-down arrow and run SEPMA2. 
 
+Logging in as a Technician
+The technicians' details are hardcoded and can be found in "Technicians.txt" in the "Files" folder.
+Login using the technician's email and password. 
+Login in using the login option (option 1 on the menu).
+You can login as a technician or staff member from this area, as it is based on your inputs. 
+
 Troubleshooting
 If you are downloading the code again, remember to delete the old version from Eclipse. You can do this by:
 1. In the "Project Explorer" tab on the left of an open Eclipse window, right click SEPM-A2 and click "Delete".
