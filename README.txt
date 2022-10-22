@@ -40,8 +40,9 @@ Running the code
 
 Logging in as a Technician
 The technicians' details are hardcoded and can be found in "Technicians.txt" in the "Files" folder.
+The comma separated value (CSV) ending in ".rmit.edu.au" is the email. The CSV following the email is the password. 
 Login using the technician's email and password. 
-Login in using the login option (option 1 on the menu).
+Login using the login option (option 1 on the menu).
 You can login as a technician or staff member from this area, as it is based on your inputs. 
 
 Troubleshooting
