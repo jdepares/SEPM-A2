@@ -1,2 +1,10 @@
-101,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test,dghsjadghs,MEDIUM,Archived,2022-10-20
-102,S3851480@student.rmit.edu.au,hpayne@paudent.rmit.edu.au,dsdfdsfds,gfgfdgfd,MEDIUM,Open,2022-10-20
+101,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test Subject 1,Test Desc 1,MEDIUM,Open,2020-10-01
+102,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test Subject 2,Test Desc 2,LOW,Closed,2020-10-02
+103,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test Subject 3,Test Desc 3,HIGH,Unresolved,2020-10-03
+104,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test Subject 4,Test Desc 4,MEDIUM,Resolved,2020-10-04
+105,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test Subject 5,Test Desc 5,LOW,Archived,2020-10-05
+106,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test Subject 6,Test Desc 6,HIGH,Open,2020-10-06
+107,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test Subject 7,Test Desc 7,MEDIUM,Closed,2020-10-07
+108,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test Subject 8,Test Desc 8,LOW,Closed,2020-10-08
+109,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test Subject 9,Test Desc 9,HIGH,Resolved,2020-10-09
+110,S3851480@student.rmit.edu.au,hstyles@student.rmit.edu.au,Test Subject 10,Test Desc 10,MEDIUM,Archived,2020-10-10
