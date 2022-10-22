@@ -102,17 +102,30 @@ public class SEPMA2 {
 	}
 
 	public void TechLoginMenu() {
-		String menu = "--------------------------\nWelcome\n--------------------------\n" + "1. Change Ticket Status\n"
-				+ "2. Change Ticket Severity\n" + "3. Logout\n";
+		String menu = "--------------------------\nWelcome\n--------------------------\n" + "1. Dashboard\n" + "2. Change Ticket Status\n"
+				+ "3. Change Ticket Severity\n" + "4. Logout\n";
 		String menuInput = "";
 
-		while (!menuInput.equals("3")) {
+		while (!menuInput.equals("4")) {
 
 			System.out.println(menu);
 			menuInput = sc.nextLine();
 
 			switch (menuInput) {
-			case "1":
+			// Prints all assigned tickets of the current user as "ticket number: subject"
+		    case "1":
+		          int technicianTickets = 0;
+	              for (int i = 0; i < this.tickets.size(); i++) {
+	                    if (this.tickets.get(i).assignedTo == currentUser) {
+	                        technicianTickets++;
+	                        System.out.printf("Ticket %s: %s\n", tickets.get(i).ticketNumber, tickets.get(i).subject);
+	                    }
+	              }
+	               if (technicianTickets == 0) {
+	                      System.out.printf("This technician has no tickets assigned to them\n");
+	                  }
+		        break;
+			case "2":
 				System.out.println("Enter ticket number: ");
 				int ticketNum = Integer.parseInt(sc.nextLine());
 				Ticket ticket = null;
@@ -172,7 +185,7 @@ public class SEPMA2 {
 					System.out.println(String.format("Ticket number %s does not exist.", ticketNum));
 				}
 				break;
-			case "2":
+			case "3":
 				System.out.println("Which ticket would you like to change: ");
 				ticketNum = Integer.parseInt(sc.nextLine());
 				ticket = null;
