@@ -305,10 +305,7 @@ public class SEPMA2 {
 		System.out.println("Description:");
 		String description = sc.nextLine();
 
-		String sev = """
-				1. Low
-				2. Medium
-				3. High""";
+		String sev = "1. Low\n2. Medium\n3. High";
 
 		System.out.println(sev);
 		int severity = Integer.parseInt(sc.nextLine());
