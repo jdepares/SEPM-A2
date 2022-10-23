@@ -21,6 +21,13 @@ public class SEPMA2 {
 	Scanner sc = new Scanner(System.in);
 
 	public SEPMA2() {
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+		    @Override
+		    public void run() {
+				System.out.print("Exiting Application...");
+		    }
+		}));
+		
 		// Import data from text files
 		startUp();
 		MainMenu();
@@ -55,6 +62,9 @@ public class SEPMA2 {
 				break;
 			case 3:
 				createAccount();
+				break;
+			case 4:
+				System.exit(0);
 				break;
 
 			}
